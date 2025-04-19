@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'downloadFromGDrive.dart';
+import 'mainScreenWidget.dart';
 
 
 void main() {
@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: const DownloadFileWidget()
+        home: const mainScreen()
     );
   }
 }

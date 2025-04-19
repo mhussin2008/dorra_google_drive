@@ -2,14 +2,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'filesData.dart';
+import 'temp/getFolderfromGdrive.dart';
 import 'progressWidget.dart';
-class DownloadFileWidget extends StatefulWidget {
-  const DownloadFileWidget({super.key});
+class mainScreen extends StatefulWidget {
+  const mainScreen({super.key});
 
   @override
-  _DownloadFileWidgetState createState() => _DownloadFileWidgetState();
+  _mainScreenState createState() => _mainScreenState();
 }
-class _DownloadFileWidgetState extends State<DownloadFileWidget> {
+class _mainScreenState extends State<mainScreen> {
    @override
   void initState() {
     print('started initState');
@@ -44,12 +45,17 @@ class _DownloadFileWidgetState extends State<DownloadFileWidget> {
             Container(
               color: Colors.cyan,
               width: double.infinity,
-              height: 400,
+              height: 500,
               child: Column(
                 children: [
                   const SizedBox(height: 20),
                   const ProgressWidget(),
                   const SizedBox(height: 20),
+                  ElevatedButton(
+                      onPressed: () async {
+                        //await downloadFolder();
+                       // setState(() {});
+                      }, child: Text('getFolder'),),
                   ElevatedButton(
                       onPressed: () {
                         print(Data.fileExists);

@@ -4,38 +4,47 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'links.dart';
 
 class Data {
   static ValueNotifier<String> newProgress = ValueNotifier<String>('');
-  static List<String> filesSignature=[];
-  static List<String> fileIdList = [
-    "https://drive.google.com/file/d/1fRwThIpPdQenhlHxKiR8OAfeSE0WwoF6/view?usp=drive_link",
-    "https://drive.google.com/file/d/1vQUqNdVPFtBUIWqpkTKgedFR1860pmN0/view?usp=drive_link",
-    "https://drive.google.com/file/d/1ILq91f_NkOmEnmocnI_gtUqIxsAm0jmf/view?usp=drive_link",
-    "https://drive.google.com/file/d/1Fa0EIjwIUBW1vhV6GIlCaKlYY0rvjZcA/view?usp=drive_link",
-    "https://drive.google.com/file/d/1EetE4LHeVap4BYV17Nv4-i3Q3nuLk2rT/view?usp=drive_link"
-  ];
-  static List<Uint8List> fileData=List.filled(fileIdList.length,
-      Uint8List(0));//Uint8List(0);
+  static List<String> filesSignature = [];
+  // static List<String> fileIdList = [
+  //   "https://drive.google.com/file/d/1fRwThIpPdQenhlHxKiR8OAfeSE0WwoF6/view?usp=drive_link",
+  //   "https://drive.google.com/file/d/1vQUqNdVPFtBUIWqpkTKgedFR1860pmN0/view?usp=drive_link",
+  //   "https://drive.google.com/file/d/1ILq91f_NkOmEnmocnI_gtUqIxsAm0jmf/view?usp=drive_link",
+  //   "https://drive.google.com/file/d/1Fa0EIjwIUBW1vhV6GIlCaKlYY0rvjZcA/view?usp=drive_link",
+  //   "https://drive.google.com/file/d/1EetE4LHeVap4BYV17Nv4-i3Q3nuLk2rT/view?usp=drive_link"
+  // ];
+
+  static List<Uint8List> fileData = List.filled(
+    links.links_List.length,
+    Uint8List(0),
+  ); //Uint8List(0);
 
   static const String fileName = 'picture';
-  static List<bool> fileExists = List<bool>.filled(fileIdList.length, false);
-  static List<bool> fileSignOk = List<bool>.filled(fileIdList.length, false);
+  static List<bool> fileExists = List<bool>.filled(
+    links.links_List.length,
+    false,
+  );
+  static List<bool> fileSignOk = List<bool>.filled(
+    links.links_List.length,
+    false,
+  );
   static bool downloadDone = false;
   static List<String> picturePath = [];
   static int mainCounter = 0;
 
-
   static Future<void> downloadFiles() async {
-    Dio _dio=Dio();
-    String url='';
+    Dio _dio = Dio();
+    String url = '';
     Directory appDocDir = await getApplicationDocumentsDirectory();
     picturePath.clear();
-    for (int i = 0; i < fileIdList.length; i++) {
-      int p = fileIdList[i].indexOf('/d/');
+    for (int i = 0; i < links.links_List.length; i++) {
+      int p = links.links_List[i].indexOf('/d/');
 
-      int e = fileIdList[i].indexOf('/view?');
-      String s = fileIdList[i].substring(p + 3, e);
+      int e = links.links_List[i].indexOf('/view?');
+      String s = links.links_List[i].substring(p + 3, e);
 
       url = 'https://drive.google.com/uc?id=$s';
       picturePath.add('${appDocDir.path}/$fileName$i.jpg');
@@ -50,14 +59,15 @@ class Data {
             onReceiveProgress: (received, total) {
               if (total != -1) {
                 newProgress.value =
-                'file no: $i ${(received / total * 100).toStringAsFixed(0)}%';
+                    'file no: $i ${(received / total * 100).toStringAsFixed(0)}%';
               }
             },
             //data: downloadedData
           );
 
           print(
-              'File downloaded to ${picturePath[i]}  Response=${response.statusMessage}');
+            'File downloaded to ${picturePath[i]}  Response=${response.statusMessage}',
+          );
           //print(downloadedData);
         } catch (e) {
           print(e);
@@ -67,29 +77,24 @@ class Data {
     }
   }
 
-
-
   static Future<void> checkStoredPictures() async {
-
     Directory appDocDir = await getApplicationDocumentsDirectory();
     picturePath.clear();
-    for (int i = 0; i < fileIdList.length; i++) {
+    for (int i = 0; i < links.links_List.length; i++) {
       var file = File('${appDocDir.path}/$fileName$i.jpg');
       picturePath.add('${appDocDir.path}/$fileName$i.jpg');
-
       fileExists[i] = file.existsSync();
-
-      {
-        print('$file  exists: $fileName$i =${fileExists[i]}');
-      }
-      ;
     }
 
-    List<bool> checklist = List<bool>.filled(fileIdList.length, true);
-    print('datafile exists=$fileExists');
-    print('check list=$checklist');
+    int storedFilesCount = fileExists.where((test) => test).length;
+    print(fileExists[200]);
+    print('$storedFilesCount out of ${links.links_List.length} files stored');
+
+    List<bool> checklist = List<bool>.filled(links.links_List.length, true);
     if (listEquals(
-        fileExists, List<bool>.filled(fileIdList.length, true)) ==
+          fileExists,
+          List<bool>.filled(links.links_List.length, true),
+        ) ==
         true) {
       downloadDone = true;
       print('downloadDone=$downloadDone');
@@ -98,7 +103,7 @@ class Data {
 
   static Future<void> deleteExistingFiles() async {
     Directory appDocDir = await getApplicationDocumentsDirectory();
-    for (int i = 0; i < fileIdList.length; i++) {
+    for (int i = 0; i < links.links_List.length; i++) {
       var file = File('${appDocDir.path}/$fileName$i.jpg');
       var tempfileExists = file.existsSync();
       if (tempfileExists == true) {
@@ -135,7 +140,8 @@ class Data {
     for (int i = 0; i < fileExists.length; i++) {
       if (fileExists[i]) {
         filesSignature.add(
-            await calculateSHA256(await readFileBytes(picturePath[i])));
+          await calculateSHA256(await readFileBytes(picturePath[i])),
+        );
       }
     }
   }
@@ -164,16 +170,13 @@ class Data {
       return;
     }
     for (int i = 0; i < picturePath.length; i++) {
-
-
-
-      if (filesSignature[i] ==
-          await calculateSHA256(Data.fileData[i])) {
-        fileSignOk[i]=true;
+      if (filesSignature[i] == await calculateSHA256(Data.fileData[i])) {
+        fileSignOk[i] = true;
         print('Signature of File # ${i + 1} is ok');
       } else {
         print(
-            '''Signature of File # ${i + 1} doesn't match , file may be corrupted''');
+          '''Signature of File # ${i + 1} doesn't match , file may be corrupted''',
+        );
       }
     }
   }
@@ -182,24 +185,23 @@ class Data {
     Uri myUri = Uri.parse(filePath);
     File audioFile = new File.fromUri(myUri);
     Uint8List bytes = Uint8List(0);
-    await audioFile.readAsBytes().then((value) {
-      bytes = Uint8List.fromList(value);
-      print('reading of bytes is completed');
-    }).catchError((onError) {
-      print('Exception Error while reading audio from path:$onError');
-    });
+    await audioFile
+        .readAsBytes()
+        .then((value) {
+          bytes = Uint8List.fromList(value);
+          print('reading of bytes is completed');
+        })
+        .catchError((onError) {
+          print('Exception Error while reading audio from path:$onError');
+        });
     return bytes;
   }
 
-  static loadStoredPictures() async{
-    for(int i=0;i<Data.fileExists.length;i++){
- if (Data.fileExists[i] == true){
-      Data.fileData[i]=await readFileBytes(Data.picturePath[i]);
-
+  static loadStoredPictures() async {
+    for (int i = 0; i < Data.fileExists.length; i++) {
+      if (Data.fileExists[i] == true) {
+        Data.fileData[i] = await readFileBytes(Data.picturePath[i]);
+      }
     }
-    }
-
   }
-  
-  
 }
