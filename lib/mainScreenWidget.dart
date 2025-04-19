@@ -18,9 +18,9 @@ class _mainScreenState extends State<mainScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       print('Called checkStoredPictures Function');
       await Data.checkStoredPictures();
-      await Data.getSignatures();
+      //await Data.getSignatures();
       await Data.loadStoredPictures();
-      await Data.checkSignatures();
+      //await Data.checkSignatures();
 
 
       print('Finished checkStoredPictures Function');
@@ -65,12 +65,12 @@ class _mainScreenState extends State<mainScreen> {
                   ElevatedButton(
                     onPressed: () async {
                       await Data.downloadFiles();
-                      await Data.checkStoredPictures();
-                      await Data.calculateFilesSignature();
-                      await Data.saveFilesSignature();
+                      //await Data.checkStoredPictures();
+                      //await Data.calculateFilesSignature();
+                      //await Data.saveFilesSignature();
                       setState(() {});
                     },
-                    child: const Text('Download Files'),
+                    child: const Text('تحميل صفحات الكتاب'),
                   ),
                   ElevatedButton(
                       onPressed: () async {

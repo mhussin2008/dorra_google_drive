@@ -78,6 +78,7 @@ class Data {
   }
 
   static Future<void> checkStoredPictures() async {
+    print('check stored pictures ***MODULE***');
     Directory appDocDir = await getApplicationDocumentsDirectory();
     picturePath.clear();
     for (int i = 0; i < links.links_List.length; i++) {
@@ -87,7 +88,7 @@ class Data {
     }
 
     int storedFilesCount = fileExists.where((test) => test).length;
-    print(fileExists[200]);
+
     print('$storedFilesCount out of ${links.links_List.length} files stored');
 
     List<bool> checklist = List<bool>.filled(links.links_List.length, true);
