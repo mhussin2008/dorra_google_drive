@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:new_prog/bookPreview.dart';
+import 'package:new_prog/links.dart';
 import 'filesData.dart';
 import 'temp/getFolderfromGdrive.dart';
 import 'progressWidget.dart';
@@ -36,82 +38,99 @@ class _mainScreenState extends State<mainScreen> {
 
     print('main Screen Rebuild counter ${Data.mainCounter++}');
     return SafeArea(
-      child: SingleChildScrollView(
-        child:
-          Container(
-            height: MediaQuery.of(context).size.height,
-           color: Colors.cyan,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.max,
+      child: Scaffold(
+appBar:   AppBar(
+  backgroundColor: Colors.blue,
+  title: Title( color: Colors.blue,
+    child: Center(child: Text(
+        'اللمسات الندية فى شرح الدرة المضية'
+    ,
+    )
+    ,
+    ),),
+),
+        body: Container(
+          height: MediaQuery.of(context).size.height,
+         width:MediaQuery.of(context).size.width ,
+         color: Colors.cyan,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisSize: MainAxisSize.max,
 
-        children: [
-          ElevatedButton(onPressed: (){},
-              child:
-              Text('تصفح الكتاب')
-          )
-          ,
+                children: [
 
-          const SizedBox(height: 20),
-              Text('ما تم تحميله : ${Data.bookDownloadedPages}'),
-              const ProgressWidget(),
-              const SizedBox(height: 20),
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       //await downloadFolder();
-              //      // setState(() {});
-              //     }, child: Text('getFolder'),),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       print(Data.fileExists);
-              //       print(Data.picturePath);
-              //     },
-              //     child: const Text('Debugger')),
-              ElevatedButton(
-                onPressed: () async {
-                  await Data.downloadFiles();
-                  //await Data.checkStoredPictures();
-                  //await Data.calculateFilesSignature();
-                  //await Data.saveFilesSignature();
-                  setState(() {});
-                },
-                child: const Text('تحميل صفحات الكتاب'),
-              ),
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       await Data.deleteExistingFiles();
-              //       await Data.checkStoredPictures();
-              //
-              //       setState(() {});
-              //     },
-              //     child: const Text('Delete Existing Files')),
-              // ElevatedButton(
-              //     onPressed: () async {
-              //       await Data.getSignatures();
-              //       await Data.checkSignatures();
-              //     },
-              //     child: const Text('Check Signatures')),
-              ElevatedButton(
-                onPressed: () async {
-                  await SystemNavigator.pop();
-                  exit(0);
-                },
-                child: const Text('الخروج من التطبيق'),
-              ),
-              // Data.fileData[0].isNotEmpty
-              //     ? Image.memory(Data.fileData[0])
-              //     : const Text('Image Not Found'),
-              // ...{
-              //   for (int i = 0; i < Data.fileExists.length; i++)
-              //     (Data.fileExists[i])
-              //         //(File(data.picturePath[i]).existsSync())
-              //         ? Image.file(width: 100, File(Data.picturePath[i]))
-              //         : const CircleAvatar()
-              // },
-            ],
-          ),
+
+
+        const SizedBox(height: 20),
+            Text('ما تم تحميله : ${Data.bookDownloadedPages} صفحات من ${links.links_List.length}'),
+
+            const SizedBox(height: 20),
+            // ElevatedButton(
+            //     onPressed: () async {
+            //       //await downloadFolder();
+            //      // setState(() {});
+            //     }, child: Text('getFolder'),),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       print(Data.fileExists);
+            //       print(Data.picturePath);
+            //     },
+            //     child: const Text('Debugger')),
+
+                  ElevatedButton(onPressed: (){
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const BookPreview()),
+                    );
+                  },
+                      child:
+                      Text('تصفح الكتاب')
+                  ),
+            ElevatedButton(
+              onPressed: () async {
+                await Data.downloadFiles();
+                //await Data.checkStoredPictures();
+                //await Data.calculateFilesSignature();
+                //await Data.saveFilesSignature();
+                setState(() {});
+              },
+              child: const Text('تحميل صفحات الكتاب'),
+            ),
+            // ElevatedButton(
+            //     onPressed: () async {
+            //       await Data.deleteExistingFiles();
+            //       await Data.checkStoredPictures();
+            //
+            //       setState(() {});
+            //     },
+            //     child: const Text('Delete Existing Files')),
+            // ElevatedButton(
+            //     onPressed: () async {
+            //       await Data.getSignatures();
+            //       await Data.checkSignatures();
+            //     },
+            //     child: const Text('Check Signatures')),
+            ElevatedButton(
+              onPressed: () async {
+                await SystemNavigator.pop();
+                exit(0);
+              },
+              child: const Text('الخروج من التطبيق'),
+            ),
+            // Data.fileData[0].isNotEmpty
+            //     ? Image.memory(Data.fileData[0])
+            //     : const Text('Image Not Found'),
+            // ...{
+            //   for (int i = 0; i < Data.fileExists.length; i++)
+            //     (Data.fileExists[i])
+            //         //(File(data.picturePath[i]).existsSync())
+            //         ? Image.file(width: 100, File(Data.picturePath[i]))
+            //         : const CircleAvatar()
+            // },
+          ],
         ),
+                ),
       ),
     );
   }
