@@ -6,11 +6,12 @@ class ProgressWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String downloaded="ما تم تحميله من الصفحات:";
     return ValueListenableBuilder<String>(
         valueListenable: Data.newProgress,
         builder: (BuildContext context, String value, child) {
           return Text(
-            'Download Progress: \n ${Data.newProgress.value}',
+            '$downloaded  ${Data.newProgress.value}',
             style: const TextStyle(fontSize: 26),
           );
         });

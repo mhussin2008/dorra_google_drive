@@ -16,7 +16,7 @@ class Data {
   //   "https://drive.google.com/file/d/1Fa0EIjwIUBW1vhV6GIlCaKlYY0rvjZcA/view?usp=drive_link",
   //   "https://drive.google.com/file/d/1EetE4LHeVap4BYV17Nv4-i3Q3nuLk2rT/view?usp=drive_link"
   // ];
-
+  static int bookDownloadedPages=0;
   static List<Uint8List> fileData = List.filled(
     links.links_List.length,
     Uint8List(0),
@@ -87,9 +87,9 @@ class Data {
       fileExists[i] = file.existsSync();
     }
 
-    int storedFilesCount = fileExists.where((test) => test).length;
+    bookDownloadedPages = fileExists.where((test) => test).length;
 
-    print('$storedFilesCount out of ${links.links_List.length} files stored');
+    print('$bookDownloadedPages out of ${links.links_List.length} files stored');
 
     List<bool> checklist = List<bool>.filled(links.links_List.length, true);
     if (listEquals(
@@ -98,8 +98,9 @@ class Data {
         ) ==
         true) {
       downloadDone = true;
-      print('downloadDone=$downloadDone');
+
     }
+    print('downloadDone=$downloadDone');
   }
 
   static Future<void> deleteExistingFiles() async {
